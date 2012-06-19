@@ -20,7 +20,7 @@ Cmake >= 2.6
 INSTALLATION
 ------------
 
-set JAVA_HOME to the java installation directory if cmake can't find it with 
+set JAVA_HOME to the java installation directory if cmake ca n't find it with 
 the FINDJava.cmake module
 
 cd src

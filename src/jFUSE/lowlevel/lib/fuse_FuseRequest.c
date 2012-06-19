@@ -890,7 +890,7 @@ JNIEXPORT void JNICALL Java_jFUSE_lowlevel_FuseRequest_reply_1data
   (JNIEnv *env, jobject jfuseRequest, jobject jfuseBufferList, jint fuseBufferCopyFlags)
 {
 /* No linux so throw NotSupportException exception */
-#if __LINUX__ == 0
+#if __LINUX__ == 0 || FUSE_VERSION < FUSE_MAKE_VERSION(2, 9)
 		(*env)->ThrowNew(env,
 				(*env)->FindClass(env, "java/lang/UnsupportedOperationException"),
 				"fuse_reply_data is not supported on this platform");

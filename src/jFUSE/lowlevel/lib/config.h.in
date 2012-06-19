@@ -1,0 +1,10 @@
+
+#ifndef JFUSE_CONFIG_H
+#define JFUSE_CONFIG_H
+
+#define FUSE_VERSION_MAJOR  @FUSE_VERSION_MAJOR@
+#define FUSE_VERSION_MINOR  @FUSE_VERSION_MINOR@
+
+#define __LINUX__   @__LINUX__@
+#define __DARWIN__  @__DARWIN__@
+#endif

@@ -4,3 +4,5 @@
 .project
 build
 src/jFUSE/lowlevel/lib/cmake_modules/cmake_install.cmake
+
+.DS_Store

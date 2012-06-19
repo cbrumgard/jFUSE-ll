@@ -1,0 +1,34 @@
+Author: Christopher Brumgard (chris.brumgard@gmail.com)
+
+
+INTRODUCTION
+------------
+Provides a Java JNI wrapper to the lowlevel FUSE interface for writing a FUSE
+file system in Java. After compiling the package, this package produces 
+a jar file called JFUSE.jar and the JNI native library, libjfuselib.{so,dylib}
+
+
+REQUIREMENTS
+------------
+Recent Linux or Mac
+Linux FUSE >= 2.6  (2.9 for splice interface)
+Fuse4X (Mac os x)
+Java >= 6 
+Cmake >= 2.6
+
+
+INSTALLATION
+------------
+
+set JAVA_HOME to the java installation directory if cmake can't find it with 
+the FINDJava.cmake module
+
+cd src
+cmake .
+make
+
+Copy JFUSE/lowlevel/JFUSE.jar and  JFUSE/lowlevel/lib/libjfuselib.so to the 
+dependencies directory for your filesystem implementation. Make sure that 
+JFUSE.jar is included in the java classpath and the location of libjfuselib.so 
+is given to java with -Djava.library.path=<path-to-library>.
+

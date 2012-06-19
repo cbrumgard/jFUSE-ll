@@ -1709,7 +1709,6 @@ static void java_fuse_readlink(fuse_req_t req, fuse_ino_t ino)
 {
 	fprintf(stderr, "%s not implemented\n", __FUNCTION__);
 	fuse_reply_err(req, EIO);
-	exit(-1);
 }
 
 static void java_fuse_mknod(fuse_req_t req, fuse_ino_t parent, const char *name,
@@ -1717,7 +1716,6 @@ static void java_fuse_mknod(fuse_req_t req, fuse_ino_t parent, const char *name,
 {
 	fprintf(stderr, "%s not implemented\n", __FUNCTION__);
 	fuse_reply_err(req, EIO);
-	exit(-1);
 }
 
 static void java_fuse_unlink(fuse_req_t req, fuse_ino_t parent, const char *name)
@@ -1809,7 +1807,6 @@ static void java_fuse_rmdir(fuse_req_t req, fuse_ino_t parent, const char *name)
 {
 	fprintf(stderr, "%s not implemented\n", __FUNCTION__);
 	fuse_reply_err(req, EIO);
-	exit(-1);
 }
 
 static void java_fuse_symlink(fuse_req_t req, const char *link, fuse_ino_t parent,
@@ -1817,7 +1814,6 @@ static void java_fuse_symlink(fuse_req_t req, const char *link, fuse_ino_t paren
 {
 	fprintf(stderr, "%s not implemented\n", __FUNCTION__);
 	fuse_reply_err(req, EIO);
-	exit(-1);
 }
 
 static void java_fuse_rename(fuse_req_t req, fuse_ino_t parent, const char *name,
@@ -1922,14 +1918,12 @@ static void java_fuse_link(fuse_req_t req, fuse_ino_t ino, fuse_ino_t newparent,
 {
 	fprintf(stderr, "%s not implemented\n", __FUNCTION__);
 	fuse_reply_err(req, EIO);
-	exit(-1);
 }
 
 static void java_fuse_flush(fuse_req_t req, fuse_ino_t ino, struct fuse_file_info *fi)
 {
 	fprintf(stderr, "%s not implemented\n", __FUNCTION__);
 	fuse_reply_err(req, EIO);
-	exit(-1);
 }
 
 static void java_fuse_fsync(fuse_req_t req, fuse_ino_t ino, int datasync,
@@ -2041,14 +2035,12 @@ static void java_fuse_fsyncdir(fuse_req_t req, fuse_ino_t ino, int datasync,
 {
 	fprintf(stderr, "%s not implemented\n", __FUNCTION__);
 	fuse_reply_err(req, EIO);
-	exit(-1);
 }
 
 static void java_fuse_statfs(fuse_req_t req, fuse_ino_t ino)
 {
 	fprintf(stderr, "%s not implemented\n", __FUNCTION__);
 	fuse_reply_err(req, EIO);
-	exit(-1);
 }
 
 /* Apple */
@@ -2463,7 +2455,6 @@ static void java_fuse_access(fuse_req_t req, fuse_ino_t ino, int mask)
 {
 	fprintf(stderr, "%s not implemented\n", __FUNCTION__);
 	fuse_reply_err(req, EIO);
-	exit(-1);
 }
 
 
@@ -2741,7 +2732,6 @@ static void java_fuse_bmap(fuse_req_t req, fuse_ino_t ino, size_t blocksize, uin
 {
 	fprintf(stderr, "%s not implemented\n", __FUNCTION__);
 	fuse_reply_err(req, EIO);
-	exit(-1);
 }
 
 

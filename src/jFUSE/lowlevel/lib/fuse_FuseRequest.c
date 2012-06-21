@@ -1045,8 +1045,11 @@ JNIEXPORT void JNICALL Java_jFUSE_lowlevel_FuseRequest_reply_1data
 	printf("Data sent\n");
 
 
+	free(fuse_bufvec);
+
 	/* Return successfully */
 	return;
+
 
 	/* Error occurred */
 	ERROR_HANDLER:
@@ -1054,6 +1057,11 @@ JNIEXPORT void JNICALL Java_jFUSE_lowlevel_FuseRequest_reply_1data
 		if((*env)->ExceptionCheck(env))
 		{
 			(*env)->ExceptionDescribe(env);
+		}
+
+		if(fuse_bufvec != NULL)
+		{
+			free(fuse_bufvec);
 		}
 
 		/* Return failure */

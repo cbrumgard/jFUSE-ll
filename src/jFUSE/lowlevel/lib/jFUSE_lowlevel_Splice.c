@@ -194,6 +194,22 @@ JNIEXPORT jobject JNICALL Java_jFUSE_lowlevel_Splice_createPipeFileDescriptor
 		goto ERROR_HANDLER;
 	}
 
+
+	/* Increments the reference count on file descriptor objects */
+	jmethodID incrementMethod = (*env)->GetMethodID(env, fileDescriptorClass,
+											"incrementAndGetUseCount", "()I");
+
+	int readFileDescriptorCounter = (*env)->CallIntMethod(env, jreadFileDescriptor, incrementMethod);
+	int writeFileDescriptorCounter = (*env)->CallIntMethod(env, jwriteFileDescriptor, incrementMethod);
+
+	if(readFileDescriptorCounter != 1 || writeFileDescriptorCounter != 1 || (*env)->ExceptionCheck(env))
+	{
+		(*env)->ThrowNew(env, (*env)->FindClass(env, "java/io/IOException"),
+				    	"Error incrementing FileDescriptor internal counter");
+		goto ERROR_HANDLER;
+	}
+
+
 	/* Returns the pipe object */
 	return jpipe;
 
@@ -283,19 +299,82 @@ JNIEXPORT void JNICALL Java_jFUSE_lowlevel_Splice_00024Pipe__1close
   (JNIEnv *env, jobject jpipe, jobject jinputFD, jobject joutputFD)
 {
 	/* Declarations */
+	jclass fileDescriptorClass = NULL;
 	int inputFD = -1;
 	int outputFD = -1;
 
 
+	fileDescriptorClass = (*env)->GetObjectClass(env, jinputFD);
+
+	/* Increments the reference count on file descriptor objects */
+	jmethodID decrementMethod = (*env)->GetMethodID(env,
+											fileDescriptorClass,
+										"decrementAndGetUseCount", "()I");
+
+	int readFileDescriptorCounter = (*env)->CallIntMethod(env, jinputFD, decrementMethod);
+	int writeFileDescriptorCounter = (*env)->CallIntMethod(env, joutputFD, decrementMethod);
 
 
-	/* Gets the unix file descriptors */
-	inputFD  = _getFDFromFileDescriptor(env, jinputFD);
-	outputFD = _getFDFromFileDescriptor(env, joutputFD);
+	/*
+	if(readFileDescriptorCounter != 1 || writeFileDescriptorCounter != 1 || (*env)->ExceptionCheck(env))
+	{
+		(*env)->ThrowNew(env, (*env)->FindClass(env, "java/io/IOException"),
+						"Error incrementing FileDescriptor internal counter");
+		goto ERROR_HANDLER;
+	}
 
-	/* Closes them */
-	close(inputFD);
-	close(outputFD);
+*/
+
+	printf("jinputFD counter = %d joutputFD counter = %d\n",
+			readFileDescriptorCounter, writeFileDescriptorCounter);
+	fflush(stdout);
+
+
+	/* If the descriptor count reached zero then close the internal fd */
+	if(readFileDescriptorCounter == 0)
+	{
+		/* Gets the unix file descriptors */
+		close(_getFDFromFileDescriptor(env, jinputFD));
+
+
+		/* Gets the access method to set the internal file descriptors */
+		jmethodID accessMethod = (*env)->GetStaticMethodID(env,
+											fileDescriptorClass, "access$002",
+												"(Ljava/io/FileDescriptor;I)I");
+
+		/* Set the internal file descriptor to -1 so that the finalize
+		 * method won't try to close it. */
+		(*env)->CallStaticIntMethod(env, fileDescriptorClass, accessMethod,
+									jinputFD, -1);
+
+		if((*env)->ExceptionCheck(env))
+		{
+			return;
+		}
+	}
+
+	/* If the descriptor count reached zero then close the internal fd */
+	if(writeFileDescriptorCounter == 0)
+	{
+		close(_getFDFromFileDescriptor(env, joutputFD));
+
+		/* Gets the access method to set the internal file descriptors */
+		jmethodID accessMethod = (*env)->GetStaticMethodID(env,
+										fileDescriptorClass, "access$002",
+										"(Ljava/io/FileDescriptor;I)I");
+
+		/* Set the internal file descriptor to -1 so that the finalize
+		 * method won't try to close it. */
+		(*env)->CallStaticIntMethod(env, fileDescriptorClass, accessMethod,
+									joutputFD, -1);
+
+		if((*env)->ExceptionCheck(env))
+		{
+			return;
+		}
+	}
+
+	return;
 }
 
 
